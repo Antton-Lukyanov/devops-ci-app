@@ -141,6 +141,6 @@ jobs:
         with:
           persist-credentials: false
       - name: Deploy with Ansible
-        run: wsl.exe -e sh -lc "cd '/mnt/c/actions-runner/_work/devops-ci-app/devops-ci-app/ansible' && ansible-playbook -i inventory/prod.ini site.yml -e app_tag=${{ github.sha }}"
+        run: wsl.exe -e sh -lc "cd '/mnt/c/actions-runner/_work/devops-ci-app/devops-ci-app/ansible' && ansible-playbook -i inventory/prod.ini deploy.yml -e app_tag=${{ github.sha }}"
       - name: Check through Nginx
         run: curl.exe --fail --silent --show-error http://${VM_HOST}/health

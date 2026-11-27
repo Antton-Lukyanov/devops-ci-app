@@ -1,0 +1,6 @@
+---
+- name: Deploy application to devops VM
+  hosts: vm
+  become: true
+  roles:
+    - app
