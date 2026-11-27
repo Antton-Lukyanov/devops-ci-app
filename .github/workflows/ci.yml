@@ -143,4 +143,4 @@ jobs:
       - name: Deploy with Ansible
         run: wsl.exe -e sh -lc "cd '/mnt/c/actions-runner/_work/devops-ci-app/devops-ci-app/ansible' && ansible-playbook -i inventory/prod.ini deploy.yml -e app_tag=${{ github.sha }}"
       - name: Check through Nginx
-        run: curl.exe --fail --silent --show-error http://${VM_HOST}/health
+                run: curl.exe --fail --silent --show-error http://192.168.56.101/health
