@@ -140,10 +140,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
-
       - name: Deploy with Ansible
-        working-directory: ansible
-        run: ansible-playbook -i inventory/prod.ini site.yml -e "app_tag=${GITHUB_SHA}"
-
+        run: wsl.exe -e sh -lc "cd '/mnt/c/actions-runner/_work/devops-ci-app/devops-ci-app/ansible' && ansible-playbook -i inventory/prod.ini site.yml -e app_tag=${{ github.sha }}"
       - name: Check through Nginx
-        run: curl --fail --silent --show-error http://${VM_HOST}/health
+        run: curl.exe --fail --silent --show-error http://${VM_HOST}/health
