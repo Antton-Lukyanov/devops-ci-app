@@ -119,3 +119,28 @@ jobs:
           tags: |
             ${{ env.IMAGE_NAME }}:latest
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
+  deploy:
+    name: Deploy to devops VM
+    needs: image
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, devops-vm]
+
+    permissions:
+      contents: read
+
+    concurrency:
+      group: deploy-devops-vm
+      cancel-in-progress: false
+
+    env:
+      VM_HOST: 192.168.56.101
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Deploy with Ansible
+        run: wsl.exe -e sh -lc "cd '/mnt/c/actions-runner/_work/devops-ci-app/devops-ci-app/ansible' && ansible-playbook -i inventory/prod.ini site.yml -e app_tag=${{ github.sha }}"
+      - name: Check through Nginx
+        run: curl.exe --fail --silent --show-error http://${VM_HOST}/health
